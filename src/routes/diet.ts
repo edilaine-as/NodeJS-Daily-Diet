@@ -33,6 +33,12 @@ export async function dietRoutes(app: FastifyInstance) {
 
         return reply.status(201).send({ message: 'The diet has been created' })
       } catch (error) {
+        if (error instanceof z.ZodError) {
+          return reply
+            .status(400)
+            .send({ error: 'Invalid parameters', issues: error.errors })
+        }
+
         return reply
           .status(500)
           .send({ error: 'An error occurred while creating the diet' })
@@ -82,6 +88,12 @@ export async function dietRoutes(app: FastifyInstance) {
 
         return reply.status(200).send({ message: 'The diet has been updated' })
       } catch (error) {
+        if (error instanceof z.ZodError) {
+          return reply
+            .status(400)
+            .send({ error: 'Invalid parameters', issues: error.errors })
+        }
+
         return reply
           .status(500)
           .send({ error: 'An error occurred while updating the diet' })
@@ -127,6 +139,12 @@ export async function dietRoutes(app: FastifyInstance) {
 
         return reply.status(200).send({ diet })
       } catch (error) {
+        if (error instanceof z.ZodError) {
+          return reply
+            .status(400)
+            .send({ error: 'Invalid parameters', issues: error.errors })
+        }
+
         return reply
           .status(500)
           .send({ error: 'An error occurred while searching the diet' })
@@ -157,6 +175,12 @@ export async function dietRoutes(app: FastifyInstance) {
 
         return reply.status(204).send()
       } catch (error) {
+        if (error instanceof z.ZodError) {
+          return reply
+            .status(400)
+            .send({ error: 'Invalid parameters', issues: error.errors })
+        }
+
         return reply
           .status(500)
           .send({ error: 'An error occurred while deleting the diet' })
