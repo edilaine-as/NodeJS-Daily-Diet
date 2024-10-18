@@ -7,6 +7,7 @@ declare module 'fastify' {
       session_id: string
       name: string
       email: string
+      password: sting
     }
   }
 }

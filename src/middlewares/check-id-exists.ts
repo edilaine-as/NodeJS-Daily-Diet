@@ -7,9 +7,11 @@ export async function checkSessionIdExists(
 ) {
   const sessionId = request.cookies.sessionId
 
+  console.log('sessionId:', sessionId)
+
   if (!sessionId) {
     return reply.status(401).send({
-      error: 'Unauthorized.',
+      error: 'Unauthorized. No sessionId found in cookies.',
     })
   }
 
@@ -20,7 +22,7 @@ export async function checkSessionIdExists(
 
   if (!user) {
     return reply.status(401).send({
-      error: 'Unauthorized.',
+      error: 'Unauthorized. Invalid sessionId.',
     })
   }
 
