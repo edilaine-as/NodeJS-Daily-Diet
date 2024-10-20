@@ -21,7 +21,7 @@ export async function dietRoutes(app: FastifyInstance) {
       try {
         const { name, description, isOnDiet, date } =
           createDietBodySchema.parse(request.body)
-
+          
         await knex('diet').insert({
           id: randomUUID(),
           user_id: request.user?.id,
