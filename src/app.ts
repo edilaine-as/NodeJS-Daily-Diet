@@ -7,7 +7,9 @@ export const app = fastify()
 
 app.register(fastifyCookie)
 app.register(require('@fastify/cors'), {
-  origin: 'http://localhost:5173', // ou '*' para permitir qualquer origem
+  origin: '*',
+  // 'http://127.0.0.1:5173',
+  // origin: 'http://localhost:5173', // ou '*' para permitir qualquer origem
   credentials: true, // Permitir envio de cookies
 })
 app.register(dietRoutes, {

@@ -17,10 +17,14 @@ describe('Diet routes', () => {
     execSync('npm run knex migrate:latest')
   })
 
-  it.skip('should be able to create a new diet', async () => {
+  it('should be able to create a new diet', async () => {
     const userResponse = await request(app.server)
       .post('/users')
-      .send({ name: 'John Doe', email: 'johndoe@gmail.com' })
+      .send({
+        name: 'John Doe',
+        email: 'johndoe@gmail.com',
+        password: '123456',
+      })
       .expect(201)
 
     const cookie = userResponse.get('Set-Cookie')
@@ -42,7 +46,11 @@ describe('Diet routes', () => {
   it('should be able to list the diets from user', async () => {
     const userResponse = await request(app.server)
       .post('/users')
-      .send({ name: 'John Doe', email: 'johndoe@gmail.com' })
+      .send({
+        name: 'John Doe',
+        email: 'johndoe@gmail.com',
+        password: '123456',
+      })
       .expect(201)
 
     const cookie = userResponse.get('Set-Cookie')
@@ -63,10 +71,14 @@ describe('Diet routes', () => {
     }
   })
 
-  it.skip('should be able to list specific diet from user', async () => {
+  it('should be able to list specific diet from user', async () => {
     const userResponse = await request(app.server)
       .post('/users')
-      .send({ name: 'John Doe', email: 'johndoe@gmail.com' })
+      .send({
+        name: 'John Doe',
+        email: 'johndoe@gmail.com',
+        password: '123456',
+      })
       .expect(201)
 
     const cookie = userResponse.get('Set-Cookie')
@@ -97,10 +109,14 @@ describe('Diet routes', () => {
     }
   })
 
-  it.skip('should be able to update the diet', async () => {
+  it('should be able to update the diet', async () => {
     const userResponse = await request(app.server)
       .post('/users')
-      .send({ name: 'John Doe', email: 'johndoe@gmail.com' })
+      .send({
+        name: 'John Doe',
+        email: 'johndoe@gmail.com',
+        password: '123456',
+      })
       .expect(201)
 
     const cookie = userResponse.get('Set-Cookie')
@@ -137,10 +153,14 @@ describe('Diet routes', () => {
     }
   })
 
-  it.skip('should be able to delete the diet', async () => {
+  it('should be able to delete the diet', async () => {
     const userResponse = await request(app.server)
       .post('/users')
-      .send({ name: 'John Doe', email: 'johndoe@gmail.com' })
+      .send({
+        name: 'John Doe',
+        email: 'johndoe@gmail.com',
+        password: '123456',
+      })
       .expect(201)
 
     const cookie = userResponse.get('Set-Cookie')
