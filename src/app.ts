@@ -12,6 +12,11 @@ app.register(require('@fastify/cors'), {
   // origin: 'http://localhost:5173', // ou '*' para permitir qualquer origem
   credentials: true, // Permitir envio de cookies
 })
+
+app.get('/', async (request, reply) => {
+  reply.send({ status: 'ok' })
+})
+
 app.register(dietRoutes, {
   prefix: 'diet',
 })
