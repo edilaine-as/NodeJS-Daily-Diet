@@ -5,7 +5,7 @@ import { knex } from '../database'
 import { comparePasswordHash } from '../utils/compare-password-hash'
 import { returnPasswordHash } from '../utils/return-password-hash'
 import { checkSessionIdExists } from '../middlewares/check-id-exists'
-import fs from 'fs';
+import fs from 'node:fs'
 
 export async function usersRoutes(app: FastifyInstance) {
   app.post('/', async (request, reply) => {
@@ -115,10 +115,11 @@ export async function usersRoutes(app: FastifyInstance) {
     }
   })
 
-  app.put('/:userId', 
+  app.put(
+    '/:userId',
     {
-    preHandler: [checkSessionIdExists],
-    }, 
+      preHandler: [checkSessionIdExists],
+    },
     async (request, reply) => {
       const updateUserParamsSchema = z.object({
         userId: z.string().uuid(),
@@ -130,62 +131,69 @@ export async function usersRoutes(app: FastifyInstance) {
         avatar: z.string().optional(),
       })
 
-      const path = require('path');
+      const path = require('node:path')
 
-      try{
-
+      try {
         const { userId } = updateUserParamsSchema.parse(request.params)
         const { name, email, avatar } = updateUserBodySchema.parse(request.body)
-        
+
         const userExists = await knex('users')
-        .select('*')
-        .where('id', userId)
-        .first()
-        
-        if(!userExists){
+          .select('*')
+          .where('id', userId)
+          .first()
+
+        if (!userExists) {
           return reply.status(400).send({ error: 'User not found' })
         }
 
-        if(avatar){
-          const uploadDir = path.join(__dirname, '..', '..', '..', 'reactjs_dailydiet', 'images', 'users');
+        if (avatar) {
+          const uploadDir = path.join(
+            __dirname,
+            '..',
+            '..',
+            '..',
+            'reactjs_dailydiet',
+            'images',
+            'users'
+          )
 
           if (!fs.existsSync(uploadDir)) {
             fs.mkdirSync(uploadDir, { recursive: true })
           }
 
-          const buffer = Buffer.from(avatar.split(',')[1], 'base64');  // Remove a parte do cabeçalho data:image/png;base64, 
-          const filePath = path.join(uploadDir, `${userId}_avatar.png`);
-          const filePathDB = path.join(`${userId}_avatar.png`);
-  
-          fs.writeFileSync(filePath, buffer);
-  
+          const buffer = Buffer.from(avatar.split(',')[1], 'base64') // Remove a parte do cabeçalho data:image/png;base64,
+          const filePath = path.join(uploadDir, `${userId}_avatar.png`)
+          const filePathDB = path.join(`${userId}_avatar.png`)
+
+          fs.writeFileSync(filePath, buffer)
+
           await knex('users')
-          .update({
-            name: name,
-            email: email,
-            avatar: filePathDB
-          })
-          .where('id', userId)
-        }else{
+            .update({
+              name: name,
+              email: email,
+              avatar: filePathDB,
+            })
+            .where('id', userId)
+        } else {
           await knex('users')
-          .update({
-            name: name,
-            email: email
-          })
-          .where('id', userId)
+            .update({
+              name: name,
+              email: email,
+            })
+            .where('id', userId)
         }
 
         return reply.status(200).send({ message: 'The user has been updated' })
-      }catch (error) {
+      } catch (error) {
         if (error instanceof z.ZodError) {
           return reply
             .status(400)
             .send({ error: 'Invalid parameters', issues: error.errors })
         }
 
-        return reply
-          .status(500)
-          .send({ error: 'An error occurred while updating the user: ' + error })
+        return reply.status(500).send({
+          error: `An error occurred while updating the user: ${error}`,
+        })
       }
     }
   )
@@ -201,9 +209,9 @@ export async function usersRoutes(app: FastifyInstance) {
       }
 
       const user = await knex('users')
-      .select('*')
-      .where('session_id', sessionId)
-      .first()
+        .select('*')
+        .where('session_id', sessionId)
+        .first()
 
       return reply.status(200).send({ user })
     } catch (error) {
